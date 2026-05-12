@@ -466,6 +466,149 @@ details.section[open] > summary::after { content: "−"; }
 .chart-wrap { display: flex; flex-wrap: wrap; gap: 28px; align-items: center; justify-content: center; }
 .chart-svg { width: 360px; max-width: 100%; height: 360px; }
 .chart-legend { flex: 1; min-width: 240px; }
+
+/* Dual-chart layout (North + South side by side) */
+.dual-chart-wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 32px;
+  margin-bottom: 28px;
+}
+.chart-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 18px 14px 22px;
+  background: linear-gradient(180deg, rgba(255,250,234,0.55) 0%, rgba(255,250,234,0.20) 100%);
+  border: 1px solid rgba(184, 134, 11, 0.30);
+  border-radius: 6px;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset, 0 2px 8px rgba(74, 25, 36, 0.06);
+}
+.chart-panel-title {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--maroon);
+  margin: 0 0 4px;
+  font-weight: 600;
+}
+.chart-panel-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--muted);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* South-Indian 4x4 grid chart */
+.south-chart {
+  width: 360px;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  border: 2px solid var(--maroon);
+  background: #fffaea;
+}
+.south-cell {
+  border: 1px solid rgba(107, 29, 43, 0.55);
+  padding: 5px 6px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Cinzel', serif;
+  min-height: 0;
+  overflow: hidden;
+}
+.south-cell.center {
+  border: none;
+  background: linear-gradient(135deg, #fef4d2 0%, #fbe5a3 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: 'Tiro Devanagari Sanskrit', 'Cormorant Garamond', serif;
+  color: var(--maroon);
+  letter-spacing: 0.04em;
+  font-size: 14px;
+  line-height: 1.35;
+  padding: 8px;
+}
+.south-cell.center .om-glyph {
+  font-size: 38px;
+  color: var(--saffron);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.south-cell .sc-rashi {
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--maroon);
+  font-weight: 600;
+  line-height: 1.2;
+}
+.south-cell .sc-rashi-en {
+  font-size: 8.5px;
+  color: var(--muted);
+  font-style: italic;
+  font-family: 'Cormorant Garamond', serif;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+.south-cell .sc-planets {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  gap: 3px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 4px 0;
+}
+.south-cell .sc-planet { white-space: nowrap; }
+.south-cell .sc-planet.exalted { color: #1a7a3d; }
+.south-cell .sc-planet.debilitated { color: #b03030; }
+.south-cell .sc-house-num {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  font-size: 9px;
+  color: var(--gold);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.south-cell.lagna-cell {
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.16) 0%, rgba(245, 158, 11, 0.04) 100%);
+}
+.south-cell.lagna-cell::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 38%;
+  height: 38%;
+  border-top: 3px solid var(--saffron);
+  border-left: 3px solid var(--saffron);
+  pointer-events: none;
+}
+.south-cell.lagna-cell .sc-asc {
+  position: absolute;
+  top: 3px;
+  left: 5px;
+  font-size: 9px;
+  color: var(--saffron);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+@media (max-width: 720px) {
+  .dual-chart-wrap { grid-template-columns: 1fr; }
+}
 .legend-row {
   display: flex; align-items: center; gap: 10px;
   font-size: 14px; padding: 4px 0;
@@ -705,10 +848,21 @@ details.section[open] > summary::after { content: "−"; }
         <summary>
           <span class="section-num">I</span>
           <span class="section-title">Rāśi Chakra — Birth Chart Wheel</span>
-          <span class="section-sub">North-Indian style natal wheel</span>
+          <span class="section-sub">Both North-Indian (diamond) &amp; South-Indian (square) styles</span>
         </summary>
-        <div class="section-body chart-wrap">
-          <div id="chartWheel"></div>
+        <div class="section-body">
+          <div class="dual-chart-wrap">
+            <div class="chart-panel">
+              <h4 class="chart-panel-title">North-Indian Style</h4>
+              <div class="chart-panel-sub">Houses fixed · Rāśis rotate · Lagna at top</div>
+              <div id="chartWheel"></div>
+            </div>
+            <div class="chart-panel">
+              <h4 class="chart-panel-title">South-Indian Style</h4>
+              <div class="chart-panel-sub">Rāśis fixed · Lagna marked · Planets placed by sign</div>
+              <div id="chartSouth"></div>
+            </div>
+          </div>
           <div id="chartLegend" class="chart-legend"></div>
         </div>
       </details>
@@ -1750,6 +1904,90 @@ function renderNorthIndianChart(lagnaRashiNum, planetsByRashi) {
   document.getElementById("chartLegend").innerHTML = legend;
 }
 
+/* South Indian rashi chakra — 4×4 grid with rāśis in FIXED positions.
+   Lagna cell is marked; planets are placed in their rāśi cells regardless of Lagna.
+   Standard South-Indian convention:
+       Top row L→R:    Meena(12)  Mesha(1)   Vrishabha(2)  Mithuna(3)
+       Row 2:          Kumbha(11)  [center]   [center]      Karka(4)
+       Row 3:          Makara(10)  [center]   [center]      Simha(5)
+       Bottom row L→R: Dhanus(9)  Vrischika(8) Tula(7)      Kanya(6)                       */
+function renderSouthIndianChart(lagnaRashiNum, planetsByRashi, planetsWithDignity) {
+  // Map rashi number -> grid cell index (0..15), reading row-major left-to-right top-to-bottom.
+  // Centre cells (5, 6, 9, 10) are reserved for the title block.
+  const RASHI_TO_CELL = {
+    12: 0,  1: 1,  2: 2,  3: 3,
+    11: 4,                       4: 7,
+    10: 8,                       5: 11,
+     9: 12, 8: 13, 7: 14, 6: 15
+  };
+  const CENTER_CELLS = new Set([5, 6, 9, 10]);
+
+  // Build planets-by-rashi map with dignity info attached
+  const planetsByRashiList = {};
+  for (let r = 1; r <= 12; r++) planetsByRashiList[r] = [];
+  const PLANET_ABBR = {
+    Sun: "Su", Moon: "Mo", Mars: "Ma", Mercury: "Me",
+    Jupiter: "Ju", Venus: "Ve", Saturn: "Sa", Rahu: "Ra", Ketu: "Ke"
+  };
+  for (const [planet, rashiNum] of Object.entries(planetsByRashi)) {
+    if (planet === "_Lagna") continue;
+    const dignity = (planetsWithDignity && planetsWithDignity[planet]) || "";
+    let cls = "";
+    if (dignity === "Exalted") cls = "exalted";
+    else if (dignity === "Debilitated") cls = "debilitated";
+    planetsByRashiList[rashiNum].push({ abbr: PLANET_ABBR[planet] || planet, cls });
+  }
+
+  // Build the grid
+  let html = `<div class="south-chart">`;
+  for (let cell = 0; cell < 16; cell++) {
+    if (CENTER_CELLS.has(cell)) {
+      // Build the center block only once at cell 5; merge visually by leaving others blank
+      if (cell === 5) {
+        const lagnaR = getRashi(lagnaRashiNum);
+        html += `<div class="south-cell center" style="grid-column: 2 / span 2; grid-row: 2 / span 2;">
+          <div>
+            <div class="om-glyph">ॐ</div>
+            <div style="font-family:'Cinzel',serif; font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:var(--maroon);">Rāśi Chakra</div>
+            <div style="margin-top:6px; font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--ink-soft); font-size:13px;">
+              Lagna: <strong style="color:var(--saffron);">${lagnaR.sanskrit}</strong>
+            </div>
+          </div>
+        </div>`;
+      }
+      // skip the other center cells
+      continue;
+    }
+    // Find which rashi maps to this cell
+    let rashiNum = null;
+    for (const [r, c] of Object.entries(RASHI_TO_CELL)) {
+      if (c === cell) { rashiNum = parseInt(r, 10); break; }
+    }
+    if (rashiNum === null) {
+      html += `<div class="south-cell"></div>`;
+      continue;
+    }
+    const r = getRashi(rashiNum);
+    const houseNum = houseFromLagna(lagnaRashiNum, rashiNum);
+    const isLagna = (rashiNum === lagnaRashiNum);
+    const planets = planetsByRashiList[rashiNum];
+
+    html += `<div class="south-cell ${isLagna ? "lagna-cell" : ""}">`;
+    html += `<div class="sc-rashi">${r.glyph}&nbsp;${r.sanskrit}</div>`;
+    html += `<div class="sc-rashi-en">${r.english}</div>`;
+    html += `<div class="sc-planets">`;
+    for (const p of planets) {
+      html += `<span class="sc-planet ${p.cls}">${p.abbr}</span>`;
+    }
+    html += `</div>`;
+    html += `<span class="sc-house-num">H${houseNum}</span>`;
+    html += `</div>`;
+  }
+  html += `</div>`;
+
+  document.getElementById("chartSouth").innerHTML = html;
+}
+
 /* Render Lagna section */
 function renderLagnaSection(lagnaRashi, lagnaDeg) {
   const interp = interpretLagna(lagnaRashi);
@@ -2038,10 +2276,14 @@ function generate() {
 
   // Planets by rashi for the chart wheel
   const planetsByRashi = {};
+  const planetsWithDignity = {};
   for (const p of ["Sun","Moon","Mars","Mercury","Jupiter","Venus","Saturn","Rahu","Ketu"]) {
-    planetsByRashi[p] = rashiOf(chart.sidereal[p]).n;
+    const rNum = rashiOf(chart.sidereal[p]).n;
+    planetsByRashi[p] = rNum;
+    planetsWithDignity[p] = planetDignity(p, rNum).label;
   }
   renderNorthIndianChart(lagnaRashiInfo.n, planetsByRashi);
+  renderSouthIndianChart(lagnaRashiInfo.n, planetsByRashi, planetsWithDignity);
 
   renderLagnaSection(lagnaRashi, lagnaRashiInfo.deg);
   renderMoonSection(moonRashi, moonRashiInfo.deg, moonHouse, moonDignity);
